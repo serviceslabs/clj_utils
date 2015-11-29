@@ -14,10 +14,11 @@ FROM (
         ON po.zipcode = mm.zip
         AND mm.msa_name LIKE :msa_name
         INNER JOIN (
-            SELECT ml.magic_list_id ml_id, sum(ifnull(mli.high_estimate, 250)) AS estimate
+            SELECT ml.magic_list_id ml_id, sum(ifnull(mli.high_estimate, :default_estimate)) AS estimate
             FROM magic_list_prod.magic_lists ml
             INNER JOIN magic_list_prod.magic_list_items mli
             ON ml.magic_list_id=mli.magic_list_id
+            AND mli.status != 'REMOVED'
             GROUP BY ml.magic_list_id) AS gsv_details
             ON gsv_details.ml_id=po.magic_list_id) AS week_sr
 GROUP BY week_sr.week_number
@@ -39,10 +40,11 @@ FROM (
         ON po.zipcode = mm.zip
         AND mm.msa_name LIKE :msa_name
         INNER JOIN (
-            SELECT ml.magic_list_id ml_id, sum(ifnull(mli.high_estimate, 250)) AS estimate
+            SELECT ml.magic_list_id ml_id, sum(ifnull(mli.high_estimate, :default_estimate)) AS estimate
             FROM magic_list_prod.magic_lists ml
             INNER JOIN magic_list_prod.magic_list_items mli
             ON ml.magic_list_id=mli.magic_list_id
+            AND mli.status != 'REMOVED'
             GROUP BY ml.magic_list_id) AS gsv_details
         ON gsv_details.ml_id=po.magic_list_id
     WHERE wi.work_item_id in (

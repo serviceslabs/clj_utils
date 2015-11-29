@@ -9,7 +9,6 @@
 
 (defonce ^:dynamic *conn* (atom nil))
 
-(conman/bind-connection *conn* "sql/queries.sql")
 (conman/bind-connection *conn* "sql/by_month.sql")
 (conman/bind-connection *conn* "sql/by_channel.sql")
 (conman/bind-connection *conn* "sql/by_channel_in_msa.sql")

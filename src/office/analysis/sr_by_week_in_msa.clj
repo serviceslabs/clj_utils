@@ -11,7 +11,8 @@
                           :upper_limit_time end-date
                           :sr_status "%"
                           :msa_name "%"
-                          :wia_status "%"}
+                          :wia_status "%"
+                          :default_estimate 120}
         sea-query-params (assoc date-query-param :msa_name "Seattle-Tacoma-Bremerton, WA CMSA")
         cal-query-params (assoc date-query-param :msa_name "San Francisco-Oakland-San Jose, CA CMSA")
         all-gen-data (dg/make-gatherers [[db/sr-count-by-week date-query-param (renamer :all)]

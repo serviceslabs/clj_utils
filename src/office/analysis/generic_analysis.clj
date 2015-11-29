@@ -12,8 +12,8 @@
 (defn get-data-for-interval [start-date end-date]
   (let [msa-names ["%" "Seattle-Tacoma-Bremerton, WA CMSA" "San Francisco-Oakland-San Jose, CA CMSA"]
         sr-statuses ["%" "COMPLETED"]
-        ;wia-statuses [".*" "Order Created"]
-        wia-statuses ["^Find Pro (Auto|IN|OFF)$"]
+        wia-statuses [".*" "Order Created"]
+        ;wia-statuses ["^Find Pro (Auto|IN|OFF)$"]
         query-param (for [msa msa-names
                           sr-status sr-statuses
                           wia wia-statuses
@@ -22,7 +22,8 @@
                        :sr_status sr-status
                        :wia_status (str "^" wia "$")
                        :lower_limit_time start-date
-                       :upper_limit_time end-date})]
+                       :upper_limit_time end-date
+                       :default_estimate 120})]
     (map (fn [q]
            (println (str "Query params:" q))
            (pp/print-table (db/generic-sr-count-and-gsv q))) query-param)))
@@ -38,7 +39,8 @@
                        :wia1_status_regex (str "^" wia1 "$")
                        :wia2_status_regex (str "^" wia2 "$")
                        :lower_limit_time start-date
-                       :upper_limit_time end-date})]
+                       :upper_limit_time end-date
+                       :default_estimate 120})]
     (print-query-result db/generic-sr-count-and-gsv-with-history query-param)))
 
 (defn first-booked-time-details [start-date end-date]
@@ -48,7 +50,8 @@
                        :sr_status "%"
                        :wia_status "^$"
                        :lower_limit_time start-date
-                       :upper_limit_time end-date})]
+                       :upper_limit_time end-date
+                       :default_estimate 120})]
     (map (fn [q]
            (println (str "Query params:" q))
            (pp/print-table (db/generic-sr-count-and-gsv-by-first-scheduled-time q))) query-param)))
@@ -58,7 +61,8 @@
         query-param (for [msa msa-names]
                       {:msa_name msa
                        :lower_limit_time start-date
-                       :upper_limit_time end-date})]
+                       :upper_limit_time end-date
+                       :default_estimate 120})]
     (map (fn [q]
            (println (str "Query params:" q))
            (pp/print-table (db/count-completed-srs q))) query-param)))
